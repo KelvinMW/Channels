@@ -1,0 +1,84 @@
+{#<!--
+Gibbon, Flexible & Open School System
+Copyright (C) 2010, Ross Parker
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+{% for post in channels %}
+
+    <div class="flex bg-white p-4 sm:px-5 sm:py-6 font-sans border-b }}">
+
+        <aside class="w-8 sm:w-12 mr-3 sm:mr-4 ">
+            <a class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gray-200 overflow-hidden flex items-start justify-center" href="{{ absoluteURL }}/index.php?q=/modules/Channels/channels.php&user={{ post.username }}">
+                <img class="w-full" src="{{ absoluteURL }}/{{ post.image_240 }}" onerror="this.src='{{ absoluteURL }}/themes/{{ gibbonThemeName }}/img/anonymous_125.jpg'" />
+            </a>
+        </aside>
+
+        <section class="w-full">
+            <header class="-mt-px mb-2 text-sm leading-none">
+                <a class="font-semibold no-underline text-gray-800" href="{{ absoluteURL }}/index.php?q=/modules/Channels/channels.php&user={{ post.username }}">{{ formatUsing('name', post.title, post.preferredName, post.surname, 'Staff', false, true) }}</a>
+                    · 
+                <span class="text-gray-600">{{ formatUsing('relativeTime', post.timestamp) }}</span>
+
+                {% if currentCategory is not empty and post.timestamp > currentCategory.timestamp %}
+                    <span class="tag selected ml-2">{{ __('New') }}</span>
+                {% endif %}
+            </header>
+
+            <div class="text-gray-700 leading-tight text-sm sm:text-base sm:mr-3">
+                {{ post.post|raw }}
+            </div>
+
+            {% if post.attachments %}
+
+                {% if post.attachments|length == 1 %}
+                    {% set postClass = 'columns-1' %}
+                {% elseif post.attachments|length % 2 == 0 %}
+                    {% set postClass = post.attachments|length > 6 ? 'columns-1 sm:columns-2 lg:columns-4' : 'columns-1 sm:columns-2' %}
+                {% else %}
+                    {% set postClass = post.attachments|length > 6 ? 'columns-1 sm:columns-2 lg:columns-3' : 'columns-1 sm:columns-2' %}
+                {% endif %}
+
+                <div class="image-container mt-6 {{ postClass }}" style="column-fill: balance;">
+                {% for attachment in post.attachments %}
+
+                    {% if attachment.type == 'Image' %}
+                    <a class="block w-full h-full" href="{{ absoluteURL }}/{{ attachment.attachment }}" data-caption="{{ post.post|striptags }}">
+                    
+                        <img class="image-item w-full rounded-sm mb-3" src="{{ absoluteURL }}/{{ attachment.attachment }}" data-caption="{{ post.post|striptags }}" style="break-inside: avoid;">
+                    </a>
+                    {% endif %}
+
+                {% endfor %}
+
+                </div>
+            {% endif %}
+
+            <footer></footer>
+        </section>
+        
+    </div>
+{% endfor %}
+<style>
+    .columns-1 {
+        columns: 1;
+    }
+
+    @media (min-width:640px){
+        .sm\:columns-2 {
+            columns: 2;
+        }
+    }
+
+    @media (min-width:1000px){
+        .lg\:columns-3 {
+            columns: 3;
+        }
+
+        .lg\:columns-4 {
+            columns: 4;
+        }
+    }
+
+</style>

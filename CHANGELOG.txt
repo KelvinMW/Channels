@@ -1,0 +1,53 @@
+CHANGELOG
+=========
+v1.0.10
+-------
+Fixed number of posts loaded via the Load More pagination button
+
+v1.0.09
+-------
+Changed the images in posts to a masonry-style layout
+
+v1.0.08
+-------
+Tweaked the aspect ratio of images so less of the image is cropped
+
+v1.0.07
+-------
+Fixed Validator class to instantiate using the container
+
+v1.0.06
+-------
+Removed deprecated function calls
+
+v1.0.05
+-------
+Refactored session variables
+
+v1.0.04
+-------
+Fixed categories when using Show Previous Year option
+
+v1.0.03
+-------
+Added setting to include previous year in Channels view
+
+v1.0.02
+-------
+Tweaked sidebar tag style
+
+v1.0.01
+-------
+Added automatic link highlighting
+
+v1.0.00
+-------
+View Channels
+Manage Posts
+
+v0.1.00
+-------
+Action definitions
+Data structure definitions
+Channels Settings
+Manage Categories
