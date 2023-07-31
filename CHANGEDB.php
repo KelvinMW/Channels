@@ -23,7 +23,7 @@ INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,
 ";
 
 //v1.0.04
-$sql[$count][0] = '0.1.10';
+$sql[$count][0] = '1.0.00';
 $sql[$count][1] = "
 ";
 

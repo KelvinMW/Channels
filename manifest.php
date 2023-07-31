@@ -25,7 +25,7 @@ $description = 'Channels allows school to create communication links to communit
 $entryURL = 'channels.php';
 $type = 'Additional';
 $category = 'Other';
-$version = '0.1.10';
+$version = '1.0.00';
 $author = 'Kelvin Maina';
 $url = 'https://github.com/KelvinMW';
 
@@ -90,7 +90,7 @@ $gibbonSetting[] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`na
 //Action rows
 $actionRows[] = [
     'name'                      => 'View Channels',
-    'precedence'                => '0',
+    'precedence'                => '1',
     'category'                  => 'Channels',
     'description'               => 'View the channels of shared posts.',
     'URLList'                   => 'channels.php',
@@ -109,12 +109,31 @@ $actionRows[] = [
 ];
 
 $actionRows[] = [
-    'name'                      => 'Manage Categories',
+  'name'                      => 'Manage Categories',
+  'precedence'                => '0',
+  'category'                  => 'Manage',
+  'description'               => 'Create, edit and delete channels categories.',
+  'URLList'                   => 'categories_manage.php,categories_manage_add.php,categories_manage_edit.php,categories_manage_delete.php',
+  'entryURL'                  => 'categories_manage.php',
+  'entrySidebar'              => 'Y',
+  'menuShow'                  => 'Y',
+  'defaultPermissionAdmin'    => 'Y',
+  'defaultPermissionTeacher'  => 'N',
+  'defaultPermissionStudent'  => 'N',
+  'defaultPermissionParent'   => 'N',
+  'defaultPermissionSupport'  => 'N',
+  'categoryPermissionStaff'   => 'Y',
+  'categoryPermissionStudent' => 'N',
+  'categoryPermissionParent'  => 'N',
+  'categoryPermissionOther'   => 'N',
+];
+$actionRows[] = [
+    'name'                      => 'Analysis',
     'precedence'                => '0',
-    'category'                  => 'Manage',
-    'description'               => 'Create, edit and delete channels categories.',
-    'URLList'                   => 'categories_manage.php,categories_manage_add.php,categories_manage_edit.php,categories_manage_delete.php',
-    'entryURL'                  => 'categories_manage.php',
+    'category'                  => 'Channels',
+    'description'               => 'Visuals of Channel posts',
+    'URLList'                   => 'channels_graphs.php',
+    'entryURL'                  => 'channels_graphs.php',
     'entrySidebar'              => 'Y',
     'menuShow'                  => 'Y',
     'defaultPermissionAdmin'    => 'Y',
