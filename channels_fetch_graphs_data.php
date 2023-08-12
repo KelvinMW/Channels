@@ -1,54 +1,50 @@
 <?php
+//This code throws Error("The response is not a valid JSON:" + text); to the channels_graphs.php after modifying as you suggested
+//How do I modify this code to achieve the objective
+ob_start();
+header('Content-Type: application/json');
+
 use Gibbon\Forms\Form;
 use Gibbon\Services\Format;
 use Gibbon\Forms\DatabaseFormFactory;
 use Gibbon\Domain\System\SettingGateway;
-use Gibbon\Module\Channels\Domain\PostGateway;
-use Gibbon\Module\Channels\Domain\PostTagGateway;
-use Gibbon\Module\Channels\Domain\PostAttachmentGateway;
+//use Gibbon\Module\Channels\Domain\PostGateway;
+//use Gibbon\Module\Channels\Domain\PostTagGateway;
+//use Gibbon\Module\Channels\Domain\PostAttachmentGateway;
 use Gibbon\Module\Channels\Domain\CategoryGateway;
 use Gibbon\Module\Channels\Domain\CategoryViewedGateway;
-    // Assuming $connection2 is a valid PDO connection
-    $categoryId = $_GET['categoryId'] ?? null;
-    $courseClassId = $_GET['courseClassId'] ?? null;
-    $startDate = $_GET['startDate'] ?? date('Y-m-d', strtotime('-7 days'));
-    $endDate = $_GET['endDate'] ?? date('Y-m-d');
+use Gibbon\FileUploader;
+use Gibbon\Data\Validator;
 
-    $whereClause = "WHERE DATE(timestamp) BETWEEN :startDate AND :endDate";
-    $params = ['startDate' => $startDate, 'endDate' => $endDate];
+//require_once '../../gibbon.php';
+require_once __DIR__ . '/../../gibbon.php';
+require_once 'ChannelsHelper.php'; 
+if (isActionAccessible($guid, $connection2, '/modules/Channels/channels_fetch_graphs_data.php') == false) {
+    // Access denied
+    $page->addError(__('You do not have access to this action.'));
+    return;
+} else {
 
-    if ($categoryId !== null) {
-        $whereClause .= " AND FIND_IN_SET(:categoryId, channelsCategoryIDList)";
-        $params['categoryId'] = $categoryId;
-    }
+$session = $container->get('session');
+$gibbon->session = $session;
+if($_POST){
+$categoryId = $_POST['channelsCategoryIDList'] ?? null;
+$courseClassId = $_POST['classes'] ?? null;
+$startDate = $_POST['startDate'] ?? date('Y-m-d', strtotime('-7 days'));
+$endDate = $_POST['endDate'] ?? date('Y-m-d');
+} else{
+    $cartegoryId = null;
+    $courseClassID= null;
+    $startDate = date('Y-m-d', strtotime('-7 days'));
+    $endDate =     date('Y-m-d');
+}
+$data = fetchGraphsData($connection2, $categoryId, $courseClassId, $startDate, $endDate);
 
-    if ($courseClassId !== null) {
-        $whereClause .= " AND gibbonCourseClassID = :courseClassId";
-        $params['courseClassId'] = $courseClassId;
-    }
+if ($data) {
+    echo json_encode(['success' => true, 'data' => $data]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Failed to fetch data']);
+}
 
-    $query = "SELECT DATE(timestamp) as date, channelsCategoryIDList as categoryIDs, COUNT(*) as count
-            FROM channelsPost 
-            $whereClause
-            GROUP BY date, categoryIDs";
-
-    $stmt = $connection2->prepare($query);
-    $stmt->execute($params);
-
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // We will create an associative array where keys are dates and values are another associative array 
-    // where keys are category IDs and values are counts.
-    $data = [];
-    foreach($result as $row) {
-        $date = $row['date'];
-        $categoryIDs = explode(',', $row['categoryIDs']);  // If categories are comma-separated
-        foreach($categoryIDs as $categoryID) {
-            if (!isset($data[$date][$categoryID])) {
-                $data[$date][$categoryID] = 0;
-            }
-            $data[$date][$categoryID] += $row['count'];
-        }
-    }
-
-    echo json_encode($data);
+}
 ?>
